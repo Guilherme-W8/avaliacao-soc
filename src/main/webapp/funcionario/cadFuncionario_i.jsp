@@ -1,63 +1,96 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"  pageEncoding="UTF8"%>
-<%@ taglib prefix="s" uri="/struts-tags" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="s" uri="/struts-tags"%>
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF8">
-		<title><s:text name="label.titulo.pagina.cadastro"/></title>
-		<link rel='stylesheet' href='webjars/bootstrap/5.1.3/css/bootstrap.min.css'>
-	</head>
-	<body class="bg-secondary">
+<head>
+<meta charset="UTF-8">
+<title><s:text name="label.titulo.pagina.cadastro" /></title>
+<link rel="stylesheet" href="../templates/header/header.css">
+<link rel='stylesheet'
+	href='webjars/bootstrap/5.1.3/css/bootstrap.min.css'>
+</head>
+<body class="bg-secondary">
+	<%@ include file="../templates/header/header.jsp"%>
+	<s:if test="hasActionErrors()">
+		<div class="toast-container position-fixed bottom-0 end-0 p-3">
+			<div id="errorToast" class="toast align-items-center border-0 text-light bg-danger" role="alert" aria-live="assertive"
+				aria-atomic="true">
+				<div class="d-flex">
+					<div class="toast-body">
+						<s:actionerror cssClass="" />
+					</div>
+					<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+				</div>
+			</div>
+		</div>
+	</s:if>
+	<div class="container">
+		<s:form action="%{'/atualizarFuncionarios.action'}" accept-charset="UTF-8">
+			<div class="card mt-5">
+				<div class="card-header d-flex align-items-center">
+					<s:url action="todosFuncionarios" var="todos" />
+					<a href="${todos}" class="btn btn-success ">Voltar</a>
 
-		<div class="container">
-			<s:form action="/novoFuncionarios.action">
+					<h5 class="card-title mb-0 mx-3">
+						<s:if test="funcionarioVo.rowid == null || funcionarioVo.rowid.isEmpty()">Novo Funcionário</s:if>
+						<s:else>Editar Funcionário</s:else>
+					</h5>
+				</div>
 
-				<div class="card mt-5">
-					<div class="card-header">
-						<div class="row">
-							<div class="col-sm-5">
-								<s:url action="todosFuncionarios" var="todos"/>
-								<a href="${todos}" class="btn btn-success" >Funcionários</a>
-							</div>
-							
-							<div class="col-sm">
-								<h5 class="card-title">Novo Funcionário</h5>
-							</div>
+				<div class="card-body">
+					<div class="row align-items-center">
+						<label for="id" class="col-sm-2 col-form-label text-center">
+							Código: </label>
+
+						<div class="col-sm-2">
+							<s:textfield cssClass="form-control" id="id"
+								name="funcionarioVo.rowid" readonly="true" />
 						</div>
 					</div>
-					
-					<div class="card-body">
-						<div class="row align-items-center">
-							<label for="id" class="col-sm-1 col-form-label text-center">
-								Código:
-							</label>	
 
-							<div class="col-sm-2">
-								<s:textfield cssClass="form-control" id="id" name="funcionarioVo.rowid" readonly="true"/>							
-							</div>	
-						</div>
-						
-						<div class="row align-items-center mt-3">
-							<label for="nome" class="col-sm-1 col-form-label text-center">
-								Nome:
-							</label>	
+					<div class="row align-items-center mt-3">
+						<label for="nome" class="col-sm-2 col-form-label text-center">
+							Nome: </label>
 
-							<div class="col-sm-5">
-								<s:textfield cssClass="form-control" id="nome" name="funcionarioVo.nome"/>							
-							</div>	
-						</div>
-					</div>
-
-					<div class="card-footer">
-						<div class="form-row">
-							<button class="btn btn-primary col-sm-4 offset-sm-1">Salvar</button>
-							<button type="reset" class="btn btn-secondary col-sm-4 offset-sm-2">Limpar Formulario</button>
+						<div class="col-sm-5">
+							<s:textfield cssClass="form-control" id="nome"
+								name="funcionarioVo.nome" />
 						</div>
 					</div>
 				</div>
-			</s:form>			
-		</div>
-		
-		<script src="webjars/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
-	</body>
+
+				<div class="card-footer">
+					<div class="form-row">
+						<button class="btn btn-primary col-sm-4 offset-sm-1">Salvar</button>
+						<button type="button" onclick="resetFormulario()"
+							class="btn btn-secondary col-sm-4 offset-sm-2">Limpar
+							Formulario</button>
+					</div>
+				</div>
+			</div>
+		</s:form>
+	</div>
+
+	<script src="webjars/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+	<s:if test="hasActionErrors()">
+		<script>
+			document.addEventListener("DOMContentLoaded", function() {
+				var toastEl = document.getElementById('errorToast');
+				var toast = new bootstrap.Toast(toastEl, {
+					delay : 0,
+					autohide : false
+				});
+				toast.show();
+			});
+		</script>
+	</s:if>
+	
+	<script>
+		function resetFormulario() {
+			var inputFuncionario = document.querySelector('input[name="funcionarioVo.nome"]');
+			inputFuncionario.value = "";
+		}
+	</script>
+</body>
 </html>
