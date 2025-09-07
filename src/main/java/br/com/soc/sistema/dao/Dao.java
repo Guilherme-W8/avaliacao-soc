@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 import br.com.soc.sistema.exception.TechnicalException;
 
-public abstract class Dao implements AutoCloseable{
+public abstract class Dao implements AutoCloseable {
 
 	private static boolean primeiraInicializacao = true;
 	private Connection con = null;
