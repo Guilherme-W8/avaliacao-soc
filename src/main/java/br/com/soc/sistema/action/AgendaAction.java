@@ -15,137 +15,135 @@ import br.com.soc.sistema.vo.AgendaVo;
 
 @SuppressWarnings("serial")
 public class AgendaAction extends Action {
-    private List<AgendaVo> agendas = new ArrayList<>();
-    private AgendaBusiness business = new AgendaBusiness();
-    private AgendaFilter filtrar = new AgendaFilter();
-    private AgendaVo agendaVo = new AgendaVo();
-    private final String proximaAction = "todosAgendas";
+	private List<AgendaVo> agendas = new ArrayList<>();
+	private AgendaBusiness agendaBusiness = new AgendaBusiness();
+	private AgendaFilter filtrar = new AgendaFilter();
+	private AgendaVo agendaVo = new AgendaVo();
+	private final String proximaAction = "todosAgendas";
 
-    public String todos() {
-        try {
-            agendas.addAll(business.trazerTodasAsAgendas());
-        } catch (SQLException e) {
-            addActionError("Erro ao listar agendas: " + e.getMessage());
-            return ERROR;
-        }
-        return SUCCESS;
-    }
-    
-    private boolean validaFiltro() {
-    	// return filtrar.isNullOpcoesCombo() || filtrar.isNullOpcoesPeriodoDisponivel() || filtrar.isNullValorBusca();
-    	return filtrar.isNullOpcoesCombo() && (filtrar.isNullOpcoesPeriodoDisponivel() || filtrar.isNullValorBusca());
-    }
-    
-    public String filtrar() {
-        if (validaFiltro())
-            return REDIRECT;
+	public String todos() {
+		try {
+			agendas.addAll(agendaBusiness.trazerTodasAsAgendas());
+		} catch (SQLException e) {
+			addActionError("Erro ao listar agendas: " + e.getMessage());
+			return ERROR;
+		}
+		return SUCCESS;
+	}
 
-        try {
-            agendas = business.filtrarAgendas(filtrar);
-        } catch (Exception e) {
-            addActionError("Erro ao filtrar agendas: " + e.getMessage());
-            return ERROR;
-        }
+	private boolean validaFiltro() {
+		return filtrar.isNullOpcoesCombo() && (filtrar.isNullOpcoesPeriodoDisponivel());
+	}
 
-        return SUCCESS;
-    }
+	public String filtrar() {		
+		if (validaFiltro())
+			return REDIRECT;
 
-    public String input() {
-        if (FunctionsHelper.isNuloOuVazioString(agendaVo.getRowid() != null ? agendaVo.getRowid().toString() : null))
-            return INPUT;
-        
-        try {
-            agendaVo = business.buscarAgendaPor(agendaVo.getRowid());
-        } catch (Exception e) {
-            addActionError("Erro ao buscar agenda: " + e.getMessage());
-            return ERROR;
-        }
-        return INPUT;
-    }
+		try {
+			agendas = agendaBusiness.filtrarAgendas(filtrar);
+		} catch (Exception e) {
+			addActionError("Erro ao buscar agendas: " + e.getMessage());
+			return ERROR;
+		}
 
-    public String atualizar() {
-        if (FunctionsHelper.isNuloOuVazioString(agendaVo.getNome())) {
-            addActionError("O nome não pode ser vazio.");
-            return INPUT;
-        }
-        
-        if (FunctionsHelper.isNuloOuVazioString(agendaVo.getCodigoPeriodoDisponivel())) {
-            addActionError("O período disponível deve ser selecionado.");
-            return INPUT;
-        }
-        
-        // Validação adicional para caracteres especiais
-        if (agendaVo.getNome().length() > 100) {
-            addActionError("O nome da agenda não pode ter mais de 100 caracteres.");
-            return INPUT;
-        }
-        
-        try {
-            if (agendaVo.getRowid() == null)
-                business.salvarAgenda(agendaVo);
-            else
-                business.atualizarAgenda(agendaVo);
-        } catch (Exception e) {
-            addActionError(e.getMessage());
-            return INPUT;
-        }
-        
-        return REDIRECT;
-    }
+		return SUCCESS;
+	}
 
-    public String excluir() {
-        if (agendaVo.getRowid() == null)
-            return ERROR;
+	public String input() {
+		if (FunctionsHelper.isNuloOuVazioString(agendaVo.getRowid() != null ? agendaVo.getRowid().toString() : null))
+			return INPUT;
 
-        try {
-            business.excluirAgenda(agendaVo.getRowid());
-        } catch (Exception e) {
-            // Verificar se o erro é devido a compromissos vinculados
-            String mensagem = e.getMessage().toLowerCase();
-            if (mensagem.contains("constraint") || mensagem.contains("foreign key") || 
-                mensagem.contains("compromisso") || mensagem.contains("referencial")) {
-                addActionError("Não é possível excluir esta agenda pois existem compromissos cadastrados para ela.");
-            } else {
-                addActionError("Erro ao excluir agenda: " + e.getMessage());
-            }
-            return ERROR;
-        }
-        return REDIRECT;
-    }
+		try {
+			agendaVo = agendaBusiness.buscarAgendaPor(agendaVo.getRowid());
+		} catch (Exception e) {
+			addActionError("Erro ao buscar agenda: " + e.getMessage());
+			return ERROR;
+		}
+		return INPUT;
+	}
 
-    public List<OpcoesComboBuscarAgenda> getListaOpcoesCombo() {
-        return Arrays.asList(OpcoesComboBuscarAgenda.values());
-    }
+	public String atualizar() {
+		if (FunctionsHelper.isNuloOuVazioString(agendaVo.getNome())) {
+			addActionError("O nome não pode ser vazio.");
+			return INPUT;
+		}
 
-    public List<PeriodoDisponivelEnum> getListaOpcoesPeriodoDisponivel() {
-        return Arrays.asList(PeriodoDisponivelEnum.values());
-    }
+		if (FunctionsHelper.isNuloOuVazioString(agendaVo.getCodigoPeriodoDisponivel())) {
+			addActionError("O período disponível deve ser selecionado.");
+			return INPUT;
+		}
 
-    public List<AgendaVo> getAgendas() {
-        return agendas;
-    }
+		if (agendaVo.getNome().length() > 100) {
+			addActionError("O nome da agenda não pode ter mais de 100 caracteres.");
+			return INPUT;
+		}
 
-    public void setAgendas(List<AgendaVo> agendas) {
-        this.agendas = agendas;
-    }
+		try {
+			if (agendaVo.getRowid() == null)
+				agendaBusiness.salvarAgenda(agendaVo);
+			else
+				agendaBusiness.atualizarAgenda(agendaVo);
+		} catch (Exception e) {
+			addActionError(e.getMessage());
+			return INPUT;
+		}
 
-    public AgendaFilter getFiltrar() {
-        return filtrar;
-    }
+		return REDIRECT;
+	}
 
-    public void setFiltrar(AgendaFilter filtrar) {
-        this.filtrar = filtrar;
-    }
+	public String excluir() {
+		if (agendaVo.getRowid() == null)
+			return ERROR;
 
-    public AgendaVo getAgendaVo() {
-        return agendaVo;
-    }
+		try {
+			agendaBusiness.excluirAgenda(agendaVo.getRowid());
+		} catch (Exception e) {
+			// Verificar se o erro é devido a compromissos vinculados
+			String mensagem = e.getMessage().toLowerCase();
+			if (mensagem.contains("constraint") || mensagem.contains("foreign key") || mensagem.contains("compromisso")
+					|| mensagem.contains("referencial")) {
+				addActionError("Não é possível excluir esta agenda pois existem compromissos cadastrados para ela.");
+			} else {
+				addActionError("Erro ao excluir agenda: " + e.getMessage());
+			}
+			return ERROR;
+		}
+		return REDIRECT;
+	}
 
-    public void setAgendaVo(AgendaVo agendaVo) {
-        this.agendaVo = agendaVo;
-    }
+	public List<OpcoesComboBuscarAgenda> getListaOpcoesCombo() {
+		return Arrays.asList(OpcoesComboBuscarAgenda.values());
+	}
 
-    public String getProximaAction() {
-        return proximaAction;
-    }
+	public List<PeriodoDisponivelEnum> getListaOpcoesPeriodoDisponivel() {
+		return Arrays.asList(PeriodoDisponivelEnum.values());
+	}
+
+	public List<AgendaVo> getAgendas() {
+		return agendas;
+	}
+
+	public void setAgendas(List<AgendaVo> agendas) {
+		this.agendas = agendas;
+	}
+
+	public AgendaFilter getFiltrar() {
+		return filtrar;
+	}
+
+	public void setFiltrar(AgendaFilter filtrar) {
+		this.filtrar = filtrar;
+	}
+
+	public AgendaVo getAgendaVo() {
+		return agendaVo;
+	}
+
+	public void setAgendaVo(AgendaVo agendaVo) {
+		this.agendaVo = agendaVo;
+	}
+
+	public String getProximaAction() {
+		return proximaAction;
+	}
 }

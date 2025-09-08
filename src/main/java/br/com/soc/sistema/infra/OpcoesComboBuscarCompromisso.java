@@ -27,7 +27,7 @@ public enum OpcoesComboBuscarCompromisso {
         this.descricao = descricao;
     }
 
-    public static OpcoesComboBuscarCompromisso buscarPor(String codigo) {
+    public static OpcoesComboBuscarCompromisso buscarPor(String codigo) throws BusinessException {
         if(codigo == null)
             throw new IllegalArgumentException("Informe um código válido");
 

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import br.com.soc.sistema.business.FuncionarioBusiness;
+import br.com.soc.sistema.exception.BusinessException;
 import br.com.soc.sistema.filter.FuncionarioFilter;
 import br.com.soc.sistema.helper.FunctionsHelper;
 import br.com.soc.sistema.infra.Action;
@@ -24,21 +25,26 @@ public class FuncionarioAction extends Action {
 		funcionarios.addAll(business.trazerTodosOsFuncionarios());
 		return SUCCESS;
 	}
+	
+	private boolean validaFiltro() {
+		return filtrar.isNullOpcoesCombo() ||  FunctionsHelper.isNuloOuVazioString(filtrar.getValorBusca());
+	}
 
 	public String filtrar() {
-		if(funcionarioVo.getRowid() == null) {
+		if (validaFiltro())
 			return REDIRECT;
+		
+		try {
+			funcionarios = business.filtrarFuncionarios(filtrar);
+		} catch (Exception e) {
+			addActionError("Erro ao buscar funcionários: " + e.getMessage());
+			return ERROR;
 		}
-		
-		if (filtrar.isNullOpcoesCombo())
-			return REDIRECT;
-		
-		funcionarios = business.filtrarFuncionarios(filtrar);
-
+	
 		return SUCCESS;
 	}
 
-	public String input() {
+	public String input() throws BusinessException {
 		if (FunctionsHelper.isNuloOuVazioString(funcionarioVo.getRowid()))
 			return INPUT;
 		funcionarioVo = business.buscarFuncionarioPor(funcionarioVo.getRowid());

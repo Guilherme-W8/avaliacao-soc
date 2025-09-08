@@ -26,7 +26,7 @@ public enum OpcoesComboBuscarAgenda {
         this.descricao = descricao;
     }
 
-    public static OpcoesComboBuscarAgenda buscarPor(String codigo) {
+    public static OpcoesComboBuscarAgenda buscarPor(String codigo) throws BusinessException {
         if(codigo == null)
             throw new IllegalArgumentException("Informe um código válido");
 

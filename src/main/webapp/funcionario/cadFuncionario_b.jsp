@@ -133,7 +133,6 @@
 				var opcaoSelecionada = selectFiltro.value;
 				
 				// Reset
-				inputBusca.value = "";
 				inputBusca.type = 'text';
 				inputBusca.placeholder = '';
 				inputBusca.removeAttribute('pattern');

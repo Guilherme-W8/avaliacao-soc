@@ -1,5 +1,6 @@
 package br.com.soc.sistema.filter;
 
+import br.com.soc.sistema.exception.BusinessException;
 import br.com.soc.sistema.infra.OpcoesComboBuscar;
 
 public class FuncionarioFilter {
@@ -19,10 +20,14 @@ public class FuncionarioFilter {
 		return opcoesCombo;
 	}
 
-	public FuncionarioFilter setOpcoesCombo(String codigo) {
-		this.opcoesCombo = OpcoesComboBuscar.buscarPor(codigo);
-		return this;
-	}	
+	public FuncionarioFilter setOpcoesCombo(String codigo) throws IllegalArgumentException, BusinessException {
+	    if (codigo == null || codigo.trim().isEmpty()) {
+	        this.opcoesCombo = null;
+	        return this;
+	    }
+	    this.opcoesCombo = OpcoesComboBuscar.buscarPor(codigo);
+	    return this;
+	}
 	
 	public boolean isNullOpcoesCombo() {
 		return this.getOpcoesCombo() == null;

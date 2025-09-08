@@ -1,5 +1,6 @@
 package br.com.soc.sistema.filter;
 
+import br.com.soc.sistema.exception.BusinessException;
 import br.com.soc.sistema.helper.FunctionsHelper;
 import br.com.soc.sistema.infra.OpcoesComboBuscarAgenda;
 import br.com.soc.sistema.infra.PeriodoDisponivelEnum;
@@ -22,7 +23,11 @@ public class AgendaFilter {
         return opcoesCombo;
     }
 
-    public AgendaFilter setOpcoesCombo(String codigo) {
+    public AgendaFilter setOpcoesCombo(String codigo) throws BusinessException {
+        if (codigo == null || codigo.trim().isEmpty()) {
+            this.opcoesCombo = null;
+            return this;
+        }
         this.opcoesCombo = OpcoesComboBuscarAgenda.buscarPor(codigo);
         return this;
     }
@@ -31,7 +36,11 @@ public class AgendaFilter {
         return opcoesPeriodoDisponivel;
     }
 
-    public AgendaFilter setOpcoesPeriodoDisponivel(String codigo) {
+    public AgendaFilter setOpcoesPeriodoDisponivel(String codigo) throws IllegalArgumentException, BusinessException {
+        if (codigo == null || codigo.trim().isEmpty()) {
+            this.opcoesPeriodoDisponivel = null;
+            return this;
+        }
         this.opcoesPeriodoDisponivel = PeriodoDisponivelEnum.buscarPor(codigo);
         return this;
     }

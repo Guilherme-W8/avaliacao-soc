@@ -13,7 +13,7 @@ import br.com.soc.sistema.vo.AgendaVo;
 
 public class AgendaDao extends Dao {
     
-    public List<AgendaVo> listarTodos() throws SQLException {
+    public List<AgendaVo> listAll() throws SQLException {
         StringBuilder query = new StringBuilder("SELECT rowid, nm_agenda, cd_periodo_disponivel FROM agenda");
         List<AgendaVo> lista = new ArrayList<>();
 
@@ -35,7 +35,7 @@ public class AgendaDao extends Dao {
         return lista;
     }
 
-    public void inserir(AgendaVo agenda) throws SQLException {
+    public void insert(AgendaVo agenda) throws SQLException {
         StringBuilder query = new StringBuilder("INSERT INTO agenda (nm_agenda, cd_periodo_disponivel) VALUES (?, ?)");
         
         try (Connection conn = getConexao(); 
@@ -55,7 +55,7 @@ public class AgendaDao extends Dao {
         }
     }
 
-    public void atualizar(AgendaVo agendaVo) throws SQLException {
+    public void update(AgendaVo agendaVo) throws SQLException {
         StringBuilder query = new StringBuilder("UPDATE agenda SET nm_agenda = ?, cd_periodo_disponivel = ? WHERE rowid = ?");
         
         try (Connection conn = getConexao(); 
@@ -68,7 +68,7 @@ public class AgendaDao extends Dao {
         }
     }
 
-    public void excluir(Integer id) throws SQLException {
+    public void delete(Integer id) throws SQLException {
         StringBuilder query = new StringBuilder("DELETE FROM agenda WHERE rowid = ?");
         
         try (Connection conn = getConexao(); 
@@ -88,17 +88,19 @@ public class AgendaDao extends Dao {
             
             ps.setInt(1, codigo);
             
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    agendaVo.setRowid(rs.getInt("rowid"));
-                    agendaVo.setNome(rs.getString("nm_agenda"));
-                    agendaVo.setCodigoPeriodoDisponivel(rs.getString("cd_periodo_disponivel"));
-                }
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                agendaVo.setRowid(rs.getInt("rowid"));
+                agendaVo.setNome(rs.getString("nm_agenda"));
+                agendaVo.setCodigoPeriodoDisponivel(rs.getString("cd_periodo_disponivel"));
+                return agendaVo;
             }
+         
         } catch (TechnicalException e) {
             throw new TechnicalException(e.getMessage());
         }
-        return agendaVo;
+        return null;
     }
 
     public List<AgendaVo> findAllByNome(String nome) {

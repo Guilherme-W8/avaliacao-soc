@@ -1,5 +1,6 @@
 package br.com.soc.sistema.vo;
 
+import br.com.soc.sistema.exception.BusinessException;
 import br.com.soc.sistema.infra.PeriodoDisponivelEnum;
 
 public class AgendaVo {
@@ -32,7 +33,7 @@ public class AgendaVo {
 		this.codigoPeriodoDisponivel = codigoPeriodoDisponivel;
 	}
 
-	public String getPeriodoDisponivel() {
+	public String getPeriodoDisponivel() throws IllegalArgumentException, BusinessException {
 		return PeriodoDisponivelEnum.buscarPor(codigoPeriodoDisponivel).getDescricao();
 	}
 }

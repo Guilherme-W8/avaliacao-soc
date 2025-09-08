@@ -47,7 +47,7 @@ public class CompromissoDao extends Dao {
         return qtdCompromissoPorCodigoAgenda;
     }
 
-    public List<CompromissoVo> listarTodos() throws SQLException, ParseException {
+    public List<CompromissoVo> listAll() throws SQLException, ParseException {
         List<CompromissoVo> lista = new ArrayList<>();
         StringBuilder query = new StringBuilder()
             .append("SELECT c.rowid, c.id_funcionario, c.id_agenda, c.data, c.hora, ")
@@ -82,7 +82,7 @@ public class CompromissoDao extends Dao {
         return lista;
     }
 
-    public void inserir(CompromissoVo compromisso) throws SQLException {
+    public void insert(CompromissoVo compromisso) throws SQLException {
         StringBuilder query = new StringBuilder("INSERT INTO compromisso (id_funcionario, id_agenda, data, hora) VALUES (?, ?, ?, ?)");
 
         try (Connection conn = getConexao(); 
@@ -98,7 +98,7 @@ public class CompromissoDao extends Dao {
         }
     }
 
-    public void atualizar(CompromissoVo compromisso) throws SQLException {
+    public void update(CompromissoVo compromisso) throws SQLException {
         StringBuilder query = new StringBuilder("UPDATE compromisso SET id_funcionario = ?, id_agenda = ?, data = ?, hora = ? WHERE rowid = ?");
 
         try (Connection conn = getConexao(); 
@@ -116,14 +116,14 @@ public class CompromissoDao extends Dao {
     }
     
     public void deleteCompromissosPorCodigoFuncionario(int id) throws SQLException {
-        deleteCompromisso(id, ParametrosCompromisso.ID_FUNCIONARIO);
+        delete(id, ParametrosCompromisso.ID_FUNCIONARIO);
     } 
 
     public void deleteCompromissoPorRowid(Integer id) throws SQLException {    
-        deleteCompromisso(id, ParametrosCompromisso.ROWID);
+        delete(id, ParametrosCompromisso.ROWID);
     }
     
-    private void deleteCompromisso(int id, ParametrosCompromisso parametroCompromisso) throws SQLException {
+    private void delete(int id, ParametrosCompromisso parametroCompromisso) throws SQLException {
         StringBuilder query = new StringBuilder("DELETE FROM compromisso ");
         
         switch (parametroCompromisso) {
@@ -207,6 +207,7 @@ public class CompromissoDao extends Dao {
 
                     String hora = rs.getTime("hora").toString();
                     compromissoVo.setHora(hora.substring(0, 5));
+                    
                     compromissoVo.setNomeFuncionario(rs.getString("nm_funcionario"));
                     compromissoVo.setNomeAgenda(rs.getString("nm_agenda"));
 
@@ -247,6 +248,7 @@ public class CompromissoDao extends Dao {
 
                     String hora = rs.getTime("hora").toString();
                     compromissoVo.setHora(hora.substring(0, 5));
+                    
                     compromissoVo.setNomeFuncionario(rs.getString("nm_funcionario"));
                     compromissoVo.setNomeAgenda(rs.getString("nm_agenda"));
 
@@ -287,6 +289,7 @@ public class CompromissoDao extends Dao {
 
                     String hora = rs.getTime("hora").toString();
                     compromissoVo.setHora(hora.substring(0, 5));
+                    
                     compromissoVo.setNomeFuncionario(rs.getString("nm_funcionario"));
                     compromissoVo.setNomeAgenda(rs.getString("nm_agenda"));
 

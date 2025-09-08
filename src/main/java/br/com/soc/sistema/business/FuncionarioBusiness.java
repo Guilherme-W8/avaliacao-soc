@@ -12,73 +12,76 @@ import br.com.soc.sistema.vo.FuncionarioVo;
 public class FuncionarioBusiness {
 
 	private static final String FOI_INFORMADO_CARACTER_NO_LUGAR_DE_UM_NUMERO = "Foi informado um caracter no lugar de um numero";
-	private FuncionarioDao dao;
+	private FuncionarioDao funcionarioDao;
 
 	public FuncionarioBusiness() {
-		this.dao = new FuncionarioDao();
+		this.funcionarioDao = new FuncionarioDao();
 	}
 
-	public void salvarFuncionario(FuncionarioVo funcionarioVo) {
+	public void salvarFuncionario(FuncionarioVo funcionarioVo) throws BusinessException {
 		try {
 			if (funcionarioVo.getNome().isEmpty())
 				throw new IllegalArgumentException("Nome nao pode ser em branco");
 
-			dao.insertFuncionario(funcionarioVo);
+			funcionarioDao.insert(funcionarioVo);
 		} catch (Exception e) {
 			throw new BusinessException("Não foi possível realizar a inclusão do registro");
 		}
 	}
 
 	public List<FuncionarioVo> trazerTodosOsFuncionarios() {
-		return dao.findAllFuncionarios();
+		return funcionarioDao.listAll();
 	}
 
-	public List<FuncionarioVo> filtrarFuncionarios(FuncionarioFilter filter) {
+	public List<FuncionarioVo> filtrarFuncionarios(FuncionarioFilter filter) throws BusinessException {
 		List<FuncionarioVo> funcionarios = new ArrayList<>();
 
 		switch (filter.getOpcoesCombo()) {
 		case ID:
 			try {
-				Integer codigo = Integer.parseInt(filter.getValorBusca());
-				funcionarios.add(dao.findByCodigo(codigo));
+				if(FunctionsHelper.isNuloOuVazioString(filter.getValorBusca())) throw new BusinessException("Preencha o campo ID para buscar.");
+				
+				FuncionarioVo funcionarioVo = funcionarioDao.findByCodigo(Integer.parseInt(filter.getValorBusca()));
+				
+				if(funcionarioVo != null) funcionarios.add(funcionarioDao.findByCodigo(Integer.parseInt(filter.getValorBusca())));
+
 			} catch (NumberFormatException e) {
 				throw new BusinessException(FOI_INFORMADO_CARACTER_NO_LUGAR_DE_UM_NUMERO);
 			}
 			break;
 
 		case NOME:
-			funcionarios.addAll(dao.findAllByNome(filter.getValorBusca()));
+			funcionarios.addAll(funcionarioDao.findAllByNome(filter.getValorBusca()));
 			break;
 		}
 
 		return funcionarios;
 	}
 
-	public FuncionarioVo buscarFuncionarioPor(String codigo) {
+	public FuncionarioVo buscarFuncionarioPor(String codigo) throws BusinessException {
 		try {
-			Integer cod = Integer.parseInt(codigo);
-			return dao.findByCodigo(cod);
+			return funcionarioDao.findByCodigo(Integer.parseInt(codigo));
 		} catch (NumberFormatException e) {
 			throw new BusinessException(FOI_INFORMADO_CARACTER_NO_LUGAR_DE_UM_NUMERO);
 		}
 	}
 
-	public void atualizarFuncionario(FuncionarioVo funcionarioVo) {
+	public void atualizarFuncionario(FuncionarioVo funcionarioVo) throws BusinessException {
 		try {
 			if (FunctionsHelper.isNuloOuVazioString(funcionarioVo.getNome()))
 				throw new IllegalArgumentException("Nome não pode ser em branco");
 
-			dao.updateFuncionario(funcionarioVo);
+			funcionarioDao.update(funcionarioVo);
 		} catch (Exception e) {
 			throw new BusinessException("Não foi possível atualizar o registro");
 		}
 	}
 
-	public void excluirFuncionario(String codigo) {
+	public void excluirFuncionario(String codigo) throws BusinessException {
 		try {
 			CompromissoBusiness compromissoBusiness = new CompromissoBusiness();
 			compromissoBusiness.excluirTodosCompromissosPorCodigoFuncionario(Integer.parseInt(codigo));
-			dao.deleteFuncionario(Integer.parseInt(codigo));
+			funcionarioDao.delete(Integer.parseInt(codigo));
 		} catch (NumberFormatException e) {
 			throw new BusinessException(FOI_INFORMADO_CARACTER_NO_LUGAR_DE_UM_NUMERO);
 		} catch (Exception e) {

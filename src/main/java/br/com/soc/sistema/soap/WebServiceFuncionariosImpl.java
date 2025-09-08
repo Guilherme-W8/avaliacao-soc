@@ -3,6 +3,7 @@ package br.com.soc.sistema.soap;
 import javax.jws.WebService;
 
 import br.com.soc.sistema.business.FuncionarioBusiness;
+import br.com.soc.sistema.exception.BusinessException;
 
 @WebService(endpointInterface = "br.com.soc.sistema.soap.WebServiceFuncionarios" )
 public class WebServiceFuncionariosImpl implements WebServiceFuncionarios {
@@ -14,7 +15,7 @@ public class WebServiceFuncionariosImpl implements WebServiceFuncionarios {
 	}
 	
 	@Override
-	public String buscarFuncionario(String codigo) {		
+	public String buscarFuncionario(String codigo) throws BusinessException {		
 		return business.buscarFuncionarioPor(codigo).toString();
 	}
 }

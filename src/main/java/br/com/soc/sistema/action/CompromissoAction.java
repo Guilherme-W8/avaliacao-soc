@@ -34,9 +34,8 @@ public class CompromissoAction extends Action {
         return SUCCESS;
     }
 
-    public String filtrar() {
-        if (filtrar.isNullOpcoesCombo())
-            return REDIRECT;
+    public String filtrar() { 
+        if (filtrar.isNullOpcoesCombo()) return REDIRECT;
 
         try {
             compromissos = compromissoBusiness.filtrarCompromissos(filtrar);

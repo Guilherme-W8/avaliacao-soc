@@ -21,7 +21,7 @@ public enum PeriodoDisponivelEnum {
         	.forEach(opcao -> opcoes.put(opcao.getCodigo(), opcao));
     }
     
-    public static PeriodoDisponivelEnum buscarPor(String codigo) throws IllegalArgumentException {
+    public static PeriodoDisponivelEnum buscarPor(String codigo) throws IllegalArgumentException, BusinessException {
 		if(codigo == null)
 			throw new IllegalArgumentException("Informe um código válido");
 		

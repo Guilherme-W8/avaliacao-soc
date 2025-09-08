@@ -14,12 +14,12 @@ import br.com.soc.sistema.vo.AgendaVo;
 import br.com.soc.sistema.vo.CompromissoVo;
 
 public class CompromissoBusiness {
-    private CompromissoDao dao;
+    private CompromissoDao compromissoDao;
     private static final String FOI_INFORMADO_CARACTER_NO_LUGAR_DE_UM_NUMERO = "Foi informado um caracter no lugar de um numero";
     private static final String DATA_INVALIDA = "Data informada está em formato inválido. Use o formato YYYY-MM-DD";
     
     public CompromissoBusiness() {
-        this.dao = new CompromissoDao();
+        this.compromissoDao = new CompromissoDao();
     }
     
     public void salvarCompromisso(CompromissoVo compromissoVo) throws SQLException {
@@ -27,17 +27,17 @@ public class CompromissoBusiness {
         	if (!validarHoraComPeriodoAgenda(compromissoVo))
                 throw new BusinessException("Horário fora do periodo disponível.");
 
-            dao.inserir(compromissoVo);
+            compromissoDao.insert(compromissoVo);
         } catch (Exception e) {
             throw new TechnicalException("Não foi possível realizar a inclusão do registro", e);
         }
     }
 
     public List<CompromissoVo> trazerTodosOsCompromissos() throws SQLException, ParseException {
-        return dao.listarTodos();
+        return compromissoDao.listAll();
     }
 
-    public List<CompromissoVo> filtrarCompromissos(CompromissoFilter filter) throws SQLException, ParseException {
+    public List<CompromissoVo> filtrarCompromissos(CompromissoFilter filter) throws SQLException, ParseException, BusinessException {
         List<CompromissoVo> compromissos = new ArrayList<>();
 
         switch (filter.getOpcoesCombo()) {
@@ -51,11 +51,11 @@ public class CompromissoBusiness {
                 break;
 
             case FUNCIONARIO:
-                compromissos.addAll(dao.findAllByFuncionario(filter.getValorBusca()));
+                compromissos.addAll(compromissoDao.findAllByFuncionario(filter.getValorBusca()));
                 break;
 
             case AGENDA:
-                compromissos.addAll(dao.findAllByAgenda(filter.getValorBusca()));
+                compromissos.addAll(compromissoDao.findAllByAgenda(filter.getValorBusca()));
                 break;
 
             case DATA:
@@ -64,7 +64,7 @@ public class CompromissoBusiness {
                     if (data == null || !data.matches("\\d{4}-\\d{2}-\\d{2}")) {
                         throw new BusinessException(DATA_INVALIDA);
                     }
-                    compromissos.addAll(dao.findAllByData(data));
+                    compromissos.addAll(compromissoDao.findAllByData(data));
                 } catch (IllegalArgumentException e) {
                     throw new BusinessException(DATA_INVALIDA);
                 }
@@ -74,9 +74,9 @@ public class CompromissoBusiness {
         return compromissos;
     }
 
-    public CompromissoVo buscarCompromissoPor(Integer codigo) throws SQLException, ParseException {
+    public CompromissoVo buscarCompromissoPor(Integer codigo) throws SQLException, ParseException, BusinessException {
         try {
-            return dao.findByCodigo(codigo);
+            return compromissoDao.findByCodigo(codigo);
         } catch (NumberFormatException e) {
             throw new BusinessException(FOI_INFORMADO_CARACTER_NO_LUGAR_DE_UM_NUMERO);
         }
@@ -87,13 +87,13 @@ public class CompromissoBusiness {
             if (!validarHoraComPeriodoAgenda(compromissoVo))
                 throw new BusinessException("Horário fora do periodo disponível.");
 
-            dao.atualizar(compromissoVo);
+            compromissoDao.update(compromissoVo);
         } catch (Exception e) {
             throw new TechnicalException("Não foi possível atualizar o registro", e);
         }
     }
     
-    private boolean validarHoraComPeriodoAgenda(CompromissoVo compromissoVo) throws SQLException {
+    private boolean validarHoraComPeriodoAgenda(CompromissoVo compromissoVo) throws SQLException, BusinessException {
     	AgendaVo agendaVo = new AgendaBusiness().buscarAgendaPor(compromissoVo.getIdAgenda());
     	
     	if(agendaVo == null) throw new BusinessException("Não foi possível encontrar a agenda");
@@ -108,7 +108,7 @@ public class CompromissoBusiness {
     	return (horaDefinida.equals(horaInicio) || horaDefinida.isAfter(horaInicio)) && (horaDefinida.equals(horaFinal) || horaDefinida.isBefore(horaFinal));
     }
     
-    private String retornaHoraInicioDisponivel(AgendaVo agendaVo) {
+    private String retornaHoraInicioDisponivel(AgendaVo agendaVo) throws BusinessException {
     	String horaInicio = "";
     
     	switch (agendaVo.getCodigoPeriodoDisponivel()) {
@@ -126,7 +126,7 @@ public class CompromissoBusiness {
     	return horaInicio;
     }
     
-    private String retornaHoraFinalDisponivel(AgendaVo agendaVo) {
+    private String retornaHoraFinalDisponivel(AgendaVo agendaVo) throws BusinessException {
     	String horaFinal = "";
     	
     	switch (agendaVo.getCodigoPeriodoDisponivel()) {
@@ -144,21 +144,21 @@ public class CompromissoBusiness {
     	return horaFinal;
     }
     
-    public void excluirCompromisso(Integer codigo) throws SQLException {
+    public void excluirCompromisso(Integer codigo) throws SQLException, BusinessException {
         try {
-            dao.deleteCompromissoPorRowid(codigo);
+            compromissoDao.deleteCompromissoPorRowid(codigo);
         } catch (SQLException e) {
             throw new BusinessException("Não foi possível excluir o registro");
         }
     }
 
     public int buscarQuantidadeCompromissoPorCodigoAgenda(int id) throws SQLException {
-        return dao.getQtdCompromissoPorCodigoAgenda(id);
+        return compromissoDao.getQtdCompromissoPorCodigoAgenda(id);
     }
     
-    public void excluirTodosCompromissosPorCodigoFuncionario(int id) throws SQLException {
+    public void excluirTodosCompromissosPorCodigoFuncionario(int id) throws SQLException, BusinessException {
         try {
-            dao.deleteCompromissosPorCodigoFuncionario(id);
+            compromissoDao.deleteCompromissosPorCodigoFuncionario(id);
         } catch (SQLException e) {
             throw new BusinessException("Não foi possível excluir os compromissos");
         }
