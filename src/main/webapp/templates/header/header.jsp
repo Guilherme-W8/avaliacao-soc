@@ -18,7 +18,7 @@
 			<a class="nav-link" href="${compromissosUrl}">Compromissos </a>
 				
 			<s:url action="filtrarRelatorios" var="relatoriosUrl" />
-			<a class="nav-link" href="${relatoriosUrl}">Gerar Relatório Compromissos </a>
+			<a class="nav-link" href="${relatoriosUrl}">Relatório </a>
 		</div>
 	</div>
 </nav>
