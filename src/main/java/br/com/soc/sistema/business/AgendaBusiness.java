@@ -6,6 +6,7 @@ import java.util.List;
 
 import br.com.soc.sistema.dao.AgendaDao;
 import br.com.soc.sistema.exception.BusinessException;
+import br.com.soc.sistema.exception.TechnicalException;
 import br.com.soc.sistema.filter.AgendaFilter;
 import br.com.soc.sistema.helper.FunctionsHelper;
 import br.com.soc.sistema.vo.AgendaVo;
@@ -82,15 +83,17 @@ public class AgendaBusiness {
 	public void atualizarAgenda(AgendaVo agendaVo) throws Exception {
 		try {
 			CompromissoBusiness compromissoBusiness = new CompromissoBusiness();
+			AgendaVo agendaOriginal = agendaDao.findByCodigo(agendaVo.getRowid());
 
-			if (compromissoBusiness.buscarQuantidadeCompromissoPorCodigoAgenda(agendaVo.getRowid()) > 0)
-				throw new BusinessException("Agenda possui vínculo com compromissos");
+			if (!agendaVo.getCodigoPeriodoDisponivel().equals(agendaOriginal.getCodigoPeriodoDisponivel()) 
+					&& compromissoBusiness.buscarQuantidadeCompromissoPorCodigoAgenda(agendaVo.getRowid()) > 0)
+				throw new BusinessException("Não é possível alterar o período da Agenda. Possui vínculo com compromissos.");
 
 			if (FunctionsHelper.isNuloOuVazioString(agendaVo.getNome()))
 				throw new BusinessException("Nome não pode ser em branco");
 
 			agendaDao.update(agendaVo);
-		} catch (IllegalArgumentException e) {
+		} catch (TechnicalException e) {
 			throw new BusinessException("Não foi possível atualizar o registro");
 		}
 	}

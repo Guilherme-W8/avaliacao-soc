@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 import br.com.soc.sistema.exception.TechnicalException;
+import br.com.soc.sistema.filter.CompromissoFilter;
 import br.com.soc.sistema.helper.FunctionsHelper;
 import br.com.soc.sistema.vo.CompromissoVo;
 
@@ -300,6 +301,53 @@ public class CompromissoDao extends Dao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return Collections.emptyList();
+    }
+    
+    public List<CompromissoVo> findAllByRangeData(CompromissoFilter filtro) throws ParseException {
+    	List<CompromissoVo> compromissos = new ArrayList<>();
+    	StringBuilder query = new StringBuilder()
+                .append("SELECT c.rowid, c.id_funcionario, c.id_agenda, c.data, c.hora, ")
+                .append("f.nm_funcionario, a.nm_agenda ")
+                .append("FROM compromisso c ")
+                .append("JOIN funcionario f ON c.id_funcionario = f.rowid ")
+                .append("JOIN agenda a ON c.id_agenda = a.rowid ")
+                .append("WHERE ");
+				
+		if (FunctionsHelper.isNuloOuVazioString(filtro.getDataFinal())) {
+        	query.append("c.data = ?");
+        } else {
+        	query.append("c.data BETWEEN ? AND ? ");
+        }
+            
+        query.append("ORDER BY c.data DESC, c.hora DESC");
+
+        try (Connection con = getConexao(); 
+             PreparedStatement ps = con.prepareStatement(query.toString())) {
+            	
+            	ps.setString(1, filtro.getDataInicial());
+		        if (!FunctionsHelper.isNuloOuVazioString(filtro.getDataFinal()))
+		        	ps.setString(2, filtro.getDataFinal());
+            	
+            	ResultSet rs = ps.executeQuery();
+
+                while (rs.next()) {
+                    CompromissoVo compromissoVo = new CompromissoVo();
+                    compromissoVo.setRowid(rs.getInt("rowid"));
+                    compromissoVo.setIdFuncionario(rs.getInt("id_funcionario"));
+                    compromissoVo.setIdAgenda(rs.getInt("id_agenda"));
+                    compromissoVo.setData(FunctionsHelper.retornaDataBR(rs.getString("data")));
+                    compromissoVo.setHora(rs.getTime("hora").toString().substring(0, 5));
+                    compromissoVo.setNomeFuncionario(rs.getString("nm_funcionario"));
+                    compromissoVo.setNomeAgenda(rs.getString("nm_agenda"));
+
+                    compromissos.add(compromissoVo);
+                }
+                    return compromissos;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
         return Collections.emptyList();
     }
 }

@@ -46,5 +46,20 @@
 			<result name="redirect" type="redirectAction">todosCompromissos</result>
 			<result name="error">/error.jsp</result>
 		</action>
+		
+		<!-- Relatorio -->
+		<action name="*Relatorios"
+			class="br.com.soc.sistema.action.RelatorioCompromissoAction" method="{1}">
+			<result name="input">/relatorioCompromissos/cadRelatorio_i.jsp</result>
+			<result name="success">/relatorioCompromissos/cadRelatorio_b.jsp</result>
+			<result name="error">/error.jsp</result>
+		</action>
+		
+		<action name="*RelatoriosExcel"
+			class="br.com.soc.sistema.action.RelatorioCompromissoExcelAction" method="{1}">
+			<result name="input" type="redirectAction">filtrarRelatorios</result>
+			<result name="success" type="redirectAction">filtrarRelatorios</result>
+			<result name="error">/error.jsp</result>
+		</action>
 	</package>
 </struts>

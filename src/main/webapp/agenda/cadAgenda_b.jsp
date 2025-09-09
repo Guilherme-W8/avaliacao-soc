@@ -11,7 +11,7 @@
 	href='webjars/bootstrap/5.1.3/css/bootstrap.min.css'>
 </head>
 <body class="bg-secondary">
-	<%@ include file="../templates/header/header.jsp" %>
+	<%@ include file="../templates/header/header.jsp"%>
 	<div class="container">
 		<div class="row mt-5 mb-2">
 			<div class="col-sm p-0">
@@ -25,13 +25,17 @@
 							listKey="%{codigo}" listValueKey="%{descricao}"
 							value="filtrar.opcoesCombo.codigo" id="opcaoCombo" />
 
-						<s:select cssClass="form-select" name="filtrar.opcoesPeriodoDisponivel"
-							list="listaOpcoesPeriodoDisponivel" headerKey="" headerValue="Escolha..."
-							listKey="%{codigo}" listValueKey="%{descricao}"
-							value="filtrar.opcoesPeriodoDisponivel.codigo" cssStyle="display:none" id="opcaoPeriodoDisponivel" />
+						<s:select cssClass="form-select"
+							name="filtrar.opcoesPeriodoDisponivel"
+							list="listaOpcoesPeriodoDisponivel" headerKey=""
+							headerValue="Escolha..." listKey="%{codigo}"
+							listValueKey="%{descricao}"
+							value="filtrar.opcoesPeriodoDisponivel.codigo"
+							cssStyle="display:none" id="opcaoPeriodoDisponivel" />
 
-						<s:textfield cssClass="form-control" id="valorBusca" cssStyle="display:none"
-							name="filtrar.valorBusca" value="%{filtrar.valorBusca}"/>
+						<s:textfield cssClass="form-control" id="valorBusca"
+							cssStyle="display:none" name="filtrar.valorBusca"
+							value="%{filtrar.valorBusca}" />
 						<button class="btn btn-primary" type="submit">
 							<s:text name="label.pesquisar" />
 						</button>
@@ -131,50 +135,52 @@
 
 		// Função para atualizar o tipo do campo de busca baseado na seleção
 		document.addEventListener('DOMContentLoaded', function() {
-			var selectFiltro = document.querySelector('select[name="filtrar.opcoesCombo"]');
-			var selectPeriodo = document.getElementById("opcaoPeriodoDisponivel");
+			var selectFiltro = document
+					.querySelector('select[name="filtrar.opcoesCombo"]');
+			var selectPeriodo = document
+					.getElementById("opcaoPeriodoDisponivel");
 			var inputBusca = document.getElementById('valorBusca');
-			
+
 			function atualizarTipoCampo() {
 				var opcaoSelecionada = selectFiltro.value;
-				
+
 				// Reset
 				inputBusca.value = "";
 				inputBusca.type = 'text';
 				inputBusca.placeholder = '';
 				inputBusca.removeAttribute('pattern');
 				inputBusca.removeAttribute('title');
-				
-				switch(opcaoSelecionada) {
-					case '1': // ID
-						inputBusca.type = 'number';
-						inputBusca.placeholder = 'Digite o ID...';
-						inputBusca.setAttribute('min', '1');
-						inputBusca.setAttribute('style', 'display: block');
-						selectPeriodo.setAttribute('style', 'display: none');
-						selectPeriodo.value = "";
-						break;
-					case '2': // Nome
-						inputBusca.type = 'text';
-						inputBusca.placeholder = 'Digite o nome...';
-						inputBusca.setAttribute('style', 'display: block');
-						selectPeriodo.setAttribute('style', 'display: none');
-						selectPeriodo.value = "";
-						break;
-					case '3': // Periodo
-						inputBusca.setAttribute('style', 'display: none');
-						selectPeriodo.setAttribute('style', 'display: block');
-						break;
-					default:
-						inputBusca.setAttribute('style', 'display: none');
-						selectPeriodo.setAttribute('style', 'display: none');
-						selectPeriodo.value = "";
-						break;
+
+				switch (opcaoSelecionada) {
+				case '1': // ID
+					inputBusca.type = 'number';
+					inputBusca.placeholder = 'Digite o ID...';
+					inputBusca.setAttribute('min', '1');
+					inputBusca.setAttribute('style', 'display: block');
+					selectPeriodo.setAttribute('style', 'display: none');
+					selectPeriodo.value = "";
+					break;
+				case '2': // Nome
+					inputBusca.type = 'text';
+					inputBusca.placeholder = 'Digite o nome...';
+					inputBusca.setAttribute('style', 'display: block');
+					selectPeriodo.setAttribute('style', 'display: none');
+					selectPeriodo.value = "";
+					break;
+				case '3': // Periodo
+					inputBusca.setAttribute('style', 'display: none');
+					selectPeriodo.setAttribute('style', 'display: block');
+					break;
+				default:
+					inputBusca.setAttribute('style', 'display: none');
+					selectPeriodo.setAttribute('style', 'display: none');
+					selectPeriodo.value = "";
+					break;
 				}
 			}
-			
+
 			selectFiltro.addEventListener('change', atualizarTipoCampo);
-			atualizarTipoCampo(); 
+			atualizarTipoCampo();
 		});
 	</script>
 </body>

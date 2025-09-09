@@ -6,6 +6,9 @@ import br.com.soc.sistema.infra.OpcoesComboBuscarCompromisso;
 public class CompromissoFilter {
     private OpcoesComboBuscarCompromisso opcoesCombo;
     private String valorBusca;
+    private String dataInicial;
+	private String dataFinal;
+	private String tipoImpressao;
 
     public String getValorBusca() {
         return valorBusca;
@@ -36,4 +39,23 @@ public class CompromissoFilter {
     public static CompromissoFilter builder() {
         return new CompromissoFilter();
     }
+    
+    public String getDataInicial() {
+		return dataInicial;
+	}
+	public void setDataInicial(String dataInicial) {
+		this.dataInicial = dataInicial;
+	}
+	public String getDataFinal() {
+		return dataFinal;
+	}
+	public void setDataFinal(String dataFinal) {
+		this.dataFinal = dataFinal;
+	}
+	public String getTipoImpressao() {
+		return tipoImpressao;
+	}
+	public void setTipoImpressao(String tipoImpressao) {
+		this.tipoImpressao = tipoImpressao;
+	}
 }

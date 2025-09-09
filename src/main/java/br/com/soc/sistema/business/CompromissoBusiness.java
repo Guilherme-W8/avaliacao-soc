@@ -59,19 +59,19 @@ public class CompromissoBusiness {
                 break;
 
             case DATA:
-                try {
-                    String data = filter.getValorBusca();
-                    if (data == null || !data.matches("\\d{4}-\\d{2}-\\d{2}")) {
-                        throw new BusinessException(DATA_INVALIDA);
-                    }
-                    compromissos.addAll(compromissoDao.findAllByData(data));
-                } catch (IllegalArgumentException e) {
+            	try {
+                    compromissos.addAll(compromissoDao.findAllByData(filter.getValorBusca()));
+                } catch (TechnicalException e) {
                     throw new BusinessException(DATA_INVALIDA);
                 }
                 break;
         }
         
         return compromissos;
+    }
+    
+    public List<CompromissoVo> buscarCompromissosPorRangeData(CompromissoFilter filtro) throws ParseException {
+    	return compromissoDao.findAllByRangeData(filtro);
     }
 
     public CompromissoVo buscarCompromissoPor(Integer codigo) throws SQLException, ParseException, BusinessException {

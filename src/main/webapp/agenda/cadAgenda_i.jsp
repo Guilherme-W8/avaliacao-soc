@@ -104,9 +104,11 @@
 
 	<script>
 		function resetFormulario() {
-			var inputNomeAgenda = document.querySelector('input[name="agendaVo.nome"]');
-			var selectPeriodo = document.querySelector('select[name="agendaVo.codigoPeriodoDisponivel"]');
-			
+			var inputNomeAgenda = document
+					.querySelector('input[name="agendaVo.nome"]');
+			var selectPeriodo = document
+					.querySelector('select[name="agendaVo.codigoPeriodoDisponivel"]');
+
 			inputNomeAgenda.value = "";
 			selectPeriodo.value = "";
 		}

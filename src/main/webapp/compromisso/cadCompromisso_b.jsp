@@ -25,8 +25,8 @@
 							listKey="%{codigo}" listValueKey="%{descricao}"
 							value="filtrar.opcoesCombo.codigo" />
 
-						<s:textfield cssClass="form-control" id="valorBusca" cssStyle="display:none"
-							name="filtrar.valorBusca" />
+						<s:textfield cssClass="form-control" id="valorBusca"
+							cssStyle="display:none" name="filtrar.valorBusca" />
 						<button class="btn btn-primary" type="submit">
 							<s:text name="label.pesquisar" />
 						</button>
@@ -139,7 +139,6 @@
 				var opcaoSelecionada = selectFiltro.value;
 
 				// Reset
-				inputBusca.value = "";
 				inputBusca.type = 'text';
 				inputBusca.placeholder = '';
 				inputBusca.removeAttribute('pattern');

@@ -52,6 +52,7 @@ public class CompromissoAction extends Action {
             return INPUT;
         
         try {
+        	filtrar.setValorBusca(String.valueOf(compromissoVo.getRowid()));
             compromissoVo = compromissoBusiness.buscarCompromissoPor(compromissoVo.getRowid());
         } catch (Exception e) {
             addActionError("Erro ao buscar compromisso: " + e.getMessage());
