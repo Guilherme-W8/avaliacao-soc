@@ -22,10 +22,10 @@ public class AgendaBusiness {
 	public void salvarAgenda(AgendaVo agenda) throws SQLException, BusinessException {
 		try {
 			if (FunctionsHelper.isNuloOuVazioString(agenda.getNome()))
-				throw new IllegalArgumentException("Nome não pode ser em branco");
+				throw new BusinessException("Nome não pode ser em branco");
 
 			agendaDao.insert(agenda);
-		} catch (Exception e) {
+		} catch (TechnicalException e) {
 			throw new BusinessException("Não foi possível realizar a inclusão do registro");
 		}
 	}
@@ -105,7 +105,7 @@ public class AgendaBusiness {
 				throw new BusinessException("Agenda possui vínculo com compromissos");
 
 			agendaDao.delete(codigo);
-		} catch (Exception e) {
+		} catch (TechnicalException e) {
 			throw new BusinessException("Não foi possível excluir o registro");
 		}
 	}

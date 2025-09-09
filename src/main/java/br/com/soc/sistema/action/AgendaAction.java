@@ -98,14 +98,7 @@ public class AgendaAction extends Action {
 		try {
 			agendaBusiness.excluirAgenda(agendaVo.getRowid());
 		} catch (Exception e) {
-			// Verificar se o erro é devido a compromissos vinculados
-			String mensagem = e.getMessage().toLowerCase();
-			if (mensagem.contains("constraint") || mensagem.contains("foreign key") || mensagem.contains("compromisso")
-					|| mensagem.contains("referencial")) {
-				addActionError("Não é possível excluir esta agenda pois existem compromissos cadastrados para ela.");
-			} else {
-				addActionError("Erro ao excluir agenda: " + e.getMessage());
-			}
+			addActionError("Erro ao excluir agenda: " + e.getMessage());
 			return ERROR;
 		}
 		return REDIRECT;
