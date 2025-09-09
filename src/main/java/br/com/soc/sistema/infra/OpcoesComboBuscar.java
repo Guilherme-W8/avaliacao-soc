@@ -9,7 +9,7 @@ import br.com.soc.sistema.exception.BusinessException;
 
 public enum OpcoesComboBuscar {
 	ID("1", "ID"), 
-	NOME("2", "NOME");
+	NOME("2", "Nome");
 	
 	private String codigo;
 	private String descricao;

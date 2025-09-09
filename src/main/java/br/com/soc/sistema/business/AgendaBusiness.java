@@ -60,7 +60,6 @@ public class AgendaBusiness {
 
 		case PERIODO:
 			try {
-				
 				if (filter.isNullOpcoesPeriodoDisponivel()) throw new BusinessException("Escolha uma opção de período válida.");
 
 				agendasVo.addAll(agendaDao.findAllByPeriodo(filter.getOpcoesPeriodoDisponivel().getCodigo()));

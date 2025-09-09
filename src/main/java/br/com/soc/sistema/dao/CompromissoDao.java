@@ -172,13 +172,14 @@ public class CompromissoDao extends Dao {
 
                     compromissoVo.setNomeFuncionario(rs.getString("nm_funcionario"));
                     compromissoVo.setNomeAgenda(rs.getString("nm_agenda"));
+                    return compromissoVo;
                 }
             }
         } catch (TechnicalException e) {
             throw new TechnicalException(e.getMessage());
         }
 
-        return compromissoVo;
+        return null;
     }
 
     public List<CompromissoVo> findAllByFuncionario(String nomeFuncionario) throws ParseException {

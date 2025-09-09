@@ -10,6 +10,7 @@ import br.com.soc.sistema.dao.CompromissoDao;
 import br.com.soc.sistema.exception.BusinessException;
 import br.com.soc.sistema.exception.TechnicalException;
 import br.com.soc.sistema.filter.CompromissoFilter;
+import br.com.soc.sistema.helper.FunctionsHelper;
 import br.com.soc.sistema.vo.AgendaVo;
 import br.com.soc.sistema.vo.CompromissoVo;
 
@@ -38,36 +39,41 @@ public class CompromissoBusiness {
     }
 
     public List<CompromissoVo> filtrarCompromissos(CompromissoFilter filter) throws SQLException, ParseException, BusinessException {
-        List<CompromissoVo> compromissos = new ArrayList<>();
+        List<CompromissoVo> compromissosVo = new ArrayList<>();
 
         switch (filter.getOpcoesCombo()) {
             case ID:
                 try {
-                    Integer codigo = Integer.parseInt(filter.getValorBusca());
-                    compromissos.add(buscarCompromissoPor(codigo));
+                	if(FunctionsHelper.isNuloOuVazioString(filter.getValorBusca())) throw new BusinessException("Preencha o campo ID para buscar.");
+                	
+                	CompromissoVo compromissoVo = compromissoDao.findByCodigo(Integer.parseInt(filter.getValorBusca()));
+                
+                	if(compromissoVo != null) compromissosVo.add(compromissoDao.findByCodigo(Integer.parseInt(filter.getValorBusca())));
                 } catch (NumberFormatException e) {
                     throw new BusinessException(FOI_INFORMADO_CARACTER_NO_LUGAR_DE_UM_NUMERO);
                 }
                 break;
 
             case FUNCIONARIO:
-                compromissos.addAll(compromissoDao.findAllByFuncionario(filter.getValorBusca()));
+            	compromissosVo.addAll(compromissoDao.findAllByFuncionario(filter.getValorBusca()));
                 break;
 
             case AGENDA:
-                compromissos.addAll(compromissoDao.findAllByAgenda(filter.getValorBusca()));
+            	compromissosVo.addAll(compromissoDao.findAllByAgenda(filter.getValorBusca()));
                 break;
 
             case DATA:
             	try {
-                    compromissos.addAll(compromissoDao.findAllByData(filter.getValorBusca()));
+            		if(FunctionsHelper.isNuloOuVazioString(filter.getValorBusca())) throw new BusinessException("Preencha o campo data para buscar.");
+                	
+            		compromissosVo.addAll(compromissoDao.findAllByData(filter.getValorBusca()));
                 } catch (TechnicalException e) {
                     throw new BusinessException(DATA_INVALIDA);
                 }
                 break;
         }
         
-        return compromissos;
+        return compromissosVo;
     }
     
     public List<CompromissoVo> buscarCompromissosPorRangeData(CompromissoFilter filtro) throws ParseException {
