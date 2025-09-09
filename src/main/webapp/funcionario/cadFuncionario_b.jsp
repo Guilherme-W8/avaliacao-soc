@@ -124,7 +124,6 @@
 			excluirBtn.setAttribute('href', href);
 		});
 		
-		// Função para atualizar o tipo do campo de busca baseado na seleção
 		document.addEventListener('DOMContentLoaded', function() {
 			var selectFiltro = document.querySelector('select[name="filtrar.opcoesCombo"]');
 			var inputBusca = document.getElementById('valorBusca');
@@ -132,20 +131,19 @@
 			function atualizarTipoCampo() {
 				var opcaoSelecionada = selectFiltro.value;
 				
-				// Reset
 				inputBusca.type = 'text';
 				inputBusca.placeholder = '';
 				inputBusca.removeAttribute('pattern');
 				inputBusca.removeAttribute('title');
 				
 				switch(opcaoSelecionada) {
-					case '1': // ID
+					case '1': 
 						inputBusca.type = 'number';
 						inputBusca.placeholder = 'Digite o ID...';
 						inputBusca.setAttribute('min', '1');
 						inputBusca.setAttribute('style', 'display: block');
 						break;
-					case '2': // Nome
+					case '2': 
 						inputBusca.type = 'text';
 						inputBusca.placeholder = 'Digite o nome...';
 						inputBusca.setAttribute('style', 'display: block');

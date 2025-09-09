@@ -8,12 +8,8 @@ public class CompromissoVo {
     private String data;
     private String hora;
     
-    // Campos auxiliares para exibição
     private String nomeFuncionario;
     private String nomeAgenda;
-
-    // Construtores
-    public CompromissoVo() {}
 
     public Integer getRowid() {
         return rowid;

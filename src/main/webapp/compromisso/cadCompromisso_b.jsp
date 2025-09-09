@@ -129,7 +129,6 @@
 			excluirBtn.setAttribute('href', href);
 		});
 
-		// Função para atualizar o tipo do campo de busca baseado na seleção
 		document.addEventListener('DOMContentLoaded', function() {
 			var selectFiltro = document
 					.querySelector('select[name="filtrar.opcoesCombo"]');
@@ -138,7 +137,6 @@
 			function atualizarTipoCampo() {
 				var opcaoSelecionada = selectFiltro.value;
 
-				// Reset
 				inputBusca.type = 'text';
 				inputBusca.placeholder = '';
 				inputBusca.removeAttribute('pattern');
@@ -146,23 +144,23 @@
 				inputBusca.removeAttribute('min');
 
 				switch (opcaoSelecionada) {
-				case '1': // ID
+				case '1': 
 					inputBusca.type = 'number';
 					inputBusca.placeholder = 'Digite o ID...';
 					inputBusca.setAttribute('min', '1');
 					inputBusca.setAttribute('style', 'display: block');
 					break;
-				case '2': // Funcionário
+				case '2': 
 					inputBusca.type = 'text';
 					inputBusca.placeholder = 'Digite o nome do funcionário...';
 					inputBusca.setAttribute('style', 'display: block');
 					break;
-				case '3': // Agenda
+				case '3': 
 					inputBusca.type = 'text';
 					inputBusca.placeholder = 'Digite o nome da agenda...';
 					inputBusca.setAttribute('style', 'display: block');
 					break;
-				case '4': // Data
+				case '4': 
 					inputBusca.type = 'date';
 					inputBusca.placeholder = '';
 					inputBusca.setAttribute('style', 'display: block');
@@ -174,7 +172,7 @@
 			}
 
 			selectFiltro.addEventListener('change', atualizarTipoCampo);
-			atualizarTipoCampo(); // Executar na inicialização
+			atualizarTipoCampo(); 
 		});
 	</script>
 </body>

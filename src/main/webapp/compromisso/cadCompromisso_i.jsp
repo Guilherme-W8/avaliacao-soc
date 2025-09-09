@@ -166,7 +166,7 @@
 			onChange: function(selectedDates, dateStr, instance) {
 			  if (!dateStr) return;
 
-			  const limites = retornaHorarioDisponivel(); // pega limites atualizados
+			  const limites = retornaHorarioDisponivel();
 			  const [h, m] = dateStr.split(":").map(Number);
 			  const minutos = h * 60 + m;
 			  

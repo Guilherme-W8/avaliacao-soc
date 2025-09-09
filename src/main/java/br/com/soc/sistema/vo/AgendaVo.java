@@ -8,7 +8,6 @@ public class AgendaVo {
 	private String nome;
 	private String codigoPeriodoDisponivel;
 
-	// Getters and Setters
 	public Integer getRowid() {
 		return rowid;
 	}
