@@ -26,7 +26,7 @@
 							value="filtrar.opcoesCombo.codigo" />
 
 						<s:textfield cssClass="form-control" id="valorBusca"
-							cssStyle="display:none" name="filtrar.valorBusca" />
+							cssStyle="display:none" name="filtrar.valorBusca" required="true" />
 						<button class="btn btn-primary" type="submit">
 							<s:text name="label.pesquisar" />
 						</button>

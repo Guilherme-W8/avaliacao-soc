@@ -55,7 +55,7 @@
 
 						<div class="col-sm-5">
 							<s:textfield cssClass="form-control" id="nome"
-								name="funcionarioVo.nome" />
+								name="funcionarioVo.nome" required="true" />
 						</div>
 					</div>
 				</div>
